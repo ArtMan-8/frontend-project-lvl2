@@ -9,3 +9,13 @@ publish:
 
 gendiff:
 		node bin/gendiff.js
+
+gendiff-linux:
+		chmod +x bin/gendiff.js
+		npm link
+
+gendiff-windows:
+		npm link
+
+gendiff-uninstall:
+		npm unlink
