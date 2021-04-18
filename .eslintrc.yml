@@ -2,8 +2,12 @@ env:
   node: true
   es2021: true
 
+plagins:
+  - jest
+
 extends:
   - airbnb-base
+  - plugin:jest/recommended
 
 parserOptions:
   ecmaVersion: 12
