@@ -1,16 +1,15 @@
 import { readFileSync } from 'fs';
-import chalk from 'chalk';
 
-const genDiff = (filepath1, filepath2) => {
-  const data1 = readFileSync(filepath1, 'utf-8');
-  const data2 = readFileSync(filepath2, 'utf-8');
+const readFile = (filepath) => readFileSync(filepath, 'utf-8');
+const toJSON = (data) => JSON.parse(data);
 
-  const json1 = JSON.parse(data1);
-  const json2 = JSON.parse(data2);
+const genDiff = (data1, data2) => {
+  const json1 = toJSON(data1);
+  const json2 = toJSON(data2);
 
   const keys = new Set([...Object.keys(json1), ...Object.keys(json2)].sort());
 
-  let result = chalk`{yellow \n{\n}`;
+  let result = '\n{\n';
   keys.forEach((key) => {
     const isExist1 = key in json1;
     const isExist2 = key in json2;
@@ -22,24 +21,26 @@ const genDiff = (filepath1, filepath2) => {
     const isUpdated = isBothExist && json1[key] !== json2[key];
 
     if (isAdded) {
-      result += chalk`{green   + ${key}: ${json2[key]}\n}`;
+      result += `  + ${key}: ${json2[key]}\n`;
     }
 
     if (isRemoved) {
-      result += chalk`{red   - ${key}: ${json1[key]}\n}`;
+      result += `  - ${key}: ${json1[key]}\n`;
     }
 
     if (isSame) {
-      result += chalk`{yellow     ${key}: ${json1[key]}\n}`;
+      result += `    ${key}: ${json1[key]}\n`;
     }
 
     if (isUpdated) {
-      result += chalk`{red   - ${key}: ${json1[key]}\n}`;
-      result += chalk`{green   + ${key}: ${json2[key]}\n}`;
+      result += `  - ${key}: ${json1[key]}\n`;
+      result += `  + ${key}: ${json2[key]}\n`;
     }
   });
 
-  return chalk`{yellow ${result}\}}`;
+  result += '}\n';
+  return result;
 };
 
+export { readFile, toJSON };
 export default genDiff;

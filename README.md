@@ -1,6 +1,6 @@
 # Get difference app
 
-[![Actions Status](https://github.com/ArtMan-8/frontend-project-lvl2/workflows/hexlet-check/badge.svg)](https://github.com/ArtMan-8/frontend-project-lvl2/actions) [![lint-check](https://github.com/ArtMan-8/frontend-project-lvl2/actions/workflows/lint-check.yml/badge.svg)](https://github.com/ArtMan-8/frontend-project-lvl2/actions/workflows/lint-check.yml) <br />
+[![Actions Status](https://github.com/ArtMan-8/frontend-project-lvl2/workflows/hexlet-check/badge.svg)](https://github.com/ArtMan-8/frontend-project-lvl2/actions) [![lint check](https://github.com/ArtMan-8/frontend-project-lvl2/actions/workflows/lint-check.yml/badge.svg)](https://github.com/ArtMan-8/frontend-project-lvl2/actions/workflows/lint-check.yml) [![run tests](https://github.com/ArtMan-8/frontend-project-lvl2/actions/workflows/run-tests.yml/badge.svg)](https://github.com/ArtMan-8/frontend-project-lvl2/actions/workflows/run-tests.yml)<br />
 [![Maintainability](https://api.codeclimate.com/v1/badges/6c0ca5e71cbfc16c7182/maintainability)](https://codeclimate.com/github/ArtMan-8/frontend-project-lvl2/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/6c0ca5e71cbfc16c7182/test_coverage)](https://codeclimate.com/github/ArtMan-8/frontend-project-lvl2/test_coverage)
 
 ## Hexlet project 
