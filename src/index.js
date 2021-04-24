@@ -1,5 +1,5 @@
 import createTree from './createTree.js';
-import formater from './formater.js';
+import formater from './formaters';
 import { getData } from './parsers.js';
 
 export default function genDiff(filepath1, filepath2, formatType) {
