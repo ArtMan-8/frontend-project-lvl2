@@ -3,7 +3,7 @@ export const NodeType = {
   REMOVED: 'removed',
   EQUAL: 'equal',
   UPDATED: 'updated',
-  WITH_CHILDREN: 'with children',
+  WITH_CHILDREN: 'withChildren',
 };
 
 const isExist = (key, node) => key in node;
@@ -11,7 +11,7 @@ const isAdded = (key, node1, node2) => !isExist(key, node1) && isExist(key, node
 const isRemoved = (key, node1, node2) => isExist(key, node1) && !isExist(key, node2);
 const isEqual = (key, node1, node2) => node1[key] === node2[key];
 
-export const isObject = (item) => (typeof item === 'object' && !Array.isArray(item) && item !== null);
+export const isObject = (object) => (typeof object === 'object' && !Array.isArray(object) && object !== null);
 
 export default function createTree(data1, data2) {
   const keys = Array.from(new Set([...Object.keys(data1), ...Object.keys(data2)].sort()));
@@ -23,6 +23,14 @@ export default function createTree(data1, data2) {
       oldValue: type === NodeType.ADDED ? null : data1[key],
       newValue: type === NodeType.REMOVED ? null : data2[key],
     });
+
+    if (isObject(data1[key]) && isObject(data2[key])) {
+      return {
+        key,
+        type: NodeType.WITH_CHILDREN,
+        children: createTree(data1[key], data2[key]),
+      };
+    }
 
     if (isAdded(key, data1, data2)) {
       return newNode(NodeType.ADDED);

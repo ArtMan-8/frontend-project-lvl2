@@ -27,18 +27,20 @@ describe('genDiff from simple file', () => {
   });
 });
 
-// describe('genDiff from complex file', () => {
-//   test('json', () => {
-//     const file1 = getFixturePath('complex-file-1.json');
-//     const file2 = getFixturePath('complex-file-2.json');
-//     const diff = readFile(getFixturePath('complex-file-diff-stylish.txt'));
-//     expect(genDiff(file1, file2)).toBe(diff);
-//   });
+describe('genDiff from complex file', () => {
+  describe(`${FormaterTypes.STYLISH} format`, () => {
+    test('json', () => {
+      const file1 = getFixturePath('complex-file-1.json');
+      const file2 = getFixturePath('complex-file-2.json');
+      const diff = readFile(getFixturePath('complex-file-diff-stylish.txt'));
+      expect(genDiff(file1, file2, FormaterTypes.STYLISH)).toBe(diff);
+    });
 
-//   test('yaml', () => {
-//     const file1 = getFixturePath('complex-file-1.yml');
-//     const file2 = getFixturePath('complex-file-2.yaml');
-//     const diff = readFile(getFixturePath('complex-file-diff-stylish.txt'));
-//     expect(genDiff(file1, file2)).toBe(diff);
-//   });
-// });
+    test('yaml', () => {
+      const file1 = getFixturePath('complex-file-1.yml');
+      const file2 = getFixturePath('complex-file-2.yaml');
+      const diff = readFile(getFixturePath('complex-file-diff-stylish.txt'));
+      expect(genDiff(file1, file2, FormaterTypes.STYLISH)).toBe(diff);
+    });
+  });
+});
