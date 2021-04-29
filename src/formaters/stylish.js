@@ -3,54 +3,35 @@ import { isObject, NodeType } from '../createTree.js';
 const getIndent = (multiplay) => ' '.repeat(multiplay);
 
 const getLineFromObject = (object, indent) => {
-  const stylishObject = (obj) => {
-    let result = '';
-    for (const [key, value] of Object.entries(obj)) {
-      result += isObject(value)
-        ? `${getIndent(indent + 4)}${key}: ${getLineFromObject(value, indent + 4)}\n`
-        : `${getIndent(indent + 4)}${key}: ${value}\n`;
-    }
-
-    return result;
-  };
+  const stylishObject = (obj) => Object.entries(obj).map(([key, value]) => (isObject(value)
+    ? `${getIndent(indent + 4)}${key}: ${getLineFromObject(value, indent + 4)}\n`
+    : `${getIndent(indent + 4)}${key}: ${value}\n`)).join('');
 
   return `{\n${stylishObject(object)}${getIndent(indent)}}`;
 };
 
 export default function getStylishTree(tree) {
   const stylishTree = (nodes, indent) => nodes.map((node) => {
+    const getValue = (value) => (isObject(value)
+      ? getLineFromObject(value, indent + 2)
+      : value);
+
+    const getNewValueString = (value) => `${getIndent(indent)}+ ${node.key}: ${getValue(value)}\n`;
+    const getOldValueString = (value) => `${getIndent(indent)}- ${node.key}: ${getValue(value)}\n`;
+    const getEqualValueString = (value) => `${getIndent(indent + 2)}${node.key}: ${getValue(value)}\n`;
+
     switch (node.type) {
       case NodeType.ADDED: {
-        const value = isObject(node.newValue)
-          ? getLineFromObject(node.newValue, indent + 2)
-          : node.newValue;
-        return `${getIndent(indent)}+ ${node.key}: ${value}\n`;
+        return getNewValueString(node.newValue);
       }
       case NodeType.REMOVED: {
-        const value = isObject(node.oldValue)
-          ? getLineFromObject(node.oldValue, indent + 2)
-          : node.oldValue;
-        return `${getIndent(indent)}- ${node.key}: ${value}\n`;
+        return getOldValueString(node.oldValue);
       }
       case NodeType.EQUAL: {
-        const value = isObject(node.newValue)
-          ? getLineFromObject(node.newValue, indent + 2)
-          : node.newValue;
-        return `${getIndent(indent + 2)}${node.key}: ${value}\n`;
+        return getEqualValueString(node.newValue);
       }
       case NodeType.UPDATED: {
-        const oldValue = isObject(node.oldValue)
-          ? getLineFromObject(node.oldValue, indent + 2)
-          : node.oldValue;
-
-        const newValue = isObject(node.newValue)
-          ? getLineFromObject(node.newValue, indent + 2)
-          : node.newValue;
-
-        const oldLine = `${getIndent(indent)}- ${node.key}: ${oldValue}`;
-        const newLine = `${getIndent(indent)}+ ${node.key}: ${newValue}`;
-
-        return `${oldLine}\n${newLine}\n`;
+        return `${getOldValueString(node.oldValue)}${getNewValueString(node.newValue)}`;
       }
       case NodeType.WITH_CHILDREN:
         return `${getIndent(indent + 2)}${node.key}: {\n${stylishTree(node.children, indent + 4).join('')}${getIndent(indent + 2)}}\n`;
