@@ -11,15 +11,15 @@ const getLineFromObject = (object, indent) => {
   return `{\n${stylishObject(object)}${getIndent(indent)}}`;
 };
 
+const getValue = (value, indent) => (_.isObject(value)
+  ? getLineFromObject(value, indent + 2)
+  : value);
+
 export default function getStylishTree(tree) {
   const stylishTree = (nodes, indent) => nodes.map((node) => {
-    const getValue = (value) => (_.isObject(value)
-      ? getLineFromObject(value, indent + 2)
-      : value);
-
-    const getNewValueString = (value) => `${getIndent(indent)}+ ${node.key}: ${getValue(value)}\n`;
-    const getOldValueString = (value) => `${getIndent(indent)}- ${node.key}: ${getValue(value)}\n`;
-    const getEqualValueString = (value) => `${getIndent(indent + 2)}${node.key}: ${getValue(value)}\n`;
+    const getNewValueString = (value) => `${getIndent(indent)}+ ${node.key}: ${getValue(value, indent)}\n`;
+    const getOldValueString = (value) => `${getIndent(indent)}- ${node.key}: ${getValue(value, indent)}\n`;
+    const getEqualValueString = (value) => `${getIndent(indent + 2)}${node.key}: ${getValue(value, indent)}\n`;
 
     switch (node.type) {
       case NodeType.ADDED: {
