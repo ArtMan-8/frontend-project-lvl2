@@ -5,7 +5,7 @@ import yaml from 'js-yaml';
 export const getFileExtension = (filepath) => path.extname(filepath).slice(1);
 export const readFile = (filepath) => fs.readFileSync(filepath, 'utf-8');
 
-export const convertData = (data, extension) => {
+const convertData = (data, extension) => {
   const convertFrom = {
     json: JSON.parse,
     yml: yaml.load,
@@ -15,8 +15,8 @@ export const convertData = (data, extension) => {
   return convertFrom[extension](data);
 };
 
-export const getData = (filepath) => {
+export default function getData(filepath) {
   const data = readFile(filepath);
   const extension = getFileExtension(filepath);
   return convertData(data, extension);
-};
+}

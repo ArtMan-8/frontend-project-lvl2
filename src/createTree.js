@@ -1,3 +1,5 @@
+import mergeSort from './mergSort.js';
+
 export const NodeType = {
   ADDED: 'added',
   REMOVED: 'removed',
@@ -14,9 +16,10 @@ const isEqual = (key, node1, node2) => node1[key] === node2[key];
 export const isObject = (object) => (typeof object === 'object' && !Array.isArray(object) && object !== null);
 
 export default function createTree(data1, data2) {
-  const keys = Array.from(new Set([...Object.keys(data1), ...Object.keys(data2)].sort()));
+  const keys = Array.from(new Set([...Object.keys(data1), ...Object.keys(data2)]));
+  const sortedKeys = mergeSort(keys);
 
-  return keys.map((key) => {
+  return sortedKeys.map((key) => {
     const newNode = (type) => ({
       key,
       type,

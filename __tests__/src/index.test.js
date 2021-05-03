@@ -59,4 +59,20 @@ describe('genDiff from complex file', () => {
       expect(genDiff(file1, file2, FormaterTypes.PLAIN)).toBe(diff);
     });
   });
+
+  describe(`${FormaterTypes.JSON} format`, () => {
+    test('json', () => {
+      const file1 = getFixturePath('complex-file-1.json');
+      const file2 = getFixturePath('complex-file-2.json');
+      const diff = readFile(getFixturePath('complex-file-diff-json.txt'));
+      expect(genDiff(file1, file2, FormaterTypes.JSON)).toBe(diff);
+    });
+
+    test('yaml', () => {
+      const file1 = getFixturePath('complex-file-1.yml');
+      const file2 = getFixturePath('complex-file-2.yaml');
+      const diff = readFile(getFixturePath('complex-file-diff-json.txt'));
+      expect(genDiff(file1, file2, FormaterTypes.JSON)).toBe(diff);
+    });
+  });
 });
