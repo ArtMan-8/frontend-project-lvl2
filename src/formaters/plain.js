@@ -1,11 +1,12 @@
-import { isObject, NodeType } from '../createTree.js';
+import _ from 'lodash';
+import { NodeType } from '../createTree.js';
 
 const getValueString = (value) => {
   if (typeof value === 'string') {
     return `'${value}'`;
   }
 
-  return isObject(value) ? '[complex value]' : `${value}`;
+  return _.isObject(value) ? '[complex value]' : `${value}`;
 };
 
 export default function getPlainTree(tree) {

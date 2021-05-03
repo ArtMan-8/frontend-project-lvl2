@@ -1,9 +1,10 @@
-import { isObject, NodeType } from '../createTree.js';
+import _ from 'lodash';
+import { NodeType } from '../createTree.js';
 
 const getIndent = (multiplay) => ' '.repeat(multiplay);
 
 const getLineFromObject = (object, indent) => {
-  const stylishObject = (obj) => Object.entries(obj).map(([key, value]) => (isObject(value)
+  const stylishObject = (obj) => Object.entries(obj).map(([key, value]) => (_.isObject(value)
     ? `${getIndent(indent + 4)}${key}: ${getLineFromObject(value, indent + 4)}\n`
     : `${getIndent(indent + 4)}${key}: ${value}\n`)).join('');
 
@@ -12,7 +13,7 @@ const getLineFromObject = (object, indent) => {
 
 export default function getStylishTree(tree) {
   const stylishTree = (nodes, indent) => nodes.map((node) => {
-    const getValue = (value) => (isObject(value)
+    const getValue = (value) => (_.isObject(value)
       ? getLineFromObject(value, indent + 2)
       : value);
 
