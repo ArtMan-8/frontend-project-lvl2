@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { NodeType } from '../createTree.js';
+import { NODE_TYPE } from '../createTree.js';
 
 const getIndent = (multiplay) => ' '.repeat(multiplay);
 
@@ -22,19 +22,19 @@ export default function getStylishTree(tree) {
     const getEqualValueString = (value) => `${getIndent(indent + 2)}${node.key}: ${getValue(value, indent)}\n`;
 
     switch (node.type) {
-      case NodeType.ADDED: {
+      case NODE_TYPE.ADDED: {
         return getNewValueString(node.newValue);
       }
-      case NodeType.REMOVED: {
+      case NODE_TYPE.REMOVED: {
         return getOldValueString(node.oldValue);
       }
-      case NodeType.EQUAL: {
+      case NODE_TYPE.EQUAL: {
         return getEqualValueString(node.newValue);
       }
-      case NodeType.UPDATED: {
+      case NODE_TYPE.UPDATED: {
         return `${getOldValueString(node.oldValue)}${getNewValueString(node.newValue)}`;
       }
-      case NodeType.WITH_CHILDREN:
+      case NODE_TYPE.WITH_CHILDREN:
         return `${getIndent(indent + 2)}${node.key}: {\n${stylishTree(node.children, indent + 4).join('')}${getIndent(indent + 2)}}\n`;
       default: throw new Error(`Unknown ${node.type}`);
     }

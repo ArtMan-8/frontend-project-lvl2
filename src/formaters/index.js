@@ -2,7 +2,7 @@ import getJsonTree from './json.js';
 import getPlainTree from './plain.js';
 import getStylishTree from './stylish.js';
 
-export const FormaterTypes = {
+export const FORMATER_TYPE = {
   STYLISH: 'stylish',
   PLAIN: 'plain',
   JSON: 'json',

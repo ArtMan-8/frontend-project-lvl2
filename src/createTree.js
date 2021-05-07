@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-export const NodeType = {
+export const NODE_TYPE = {
   ADDED: 'added',
   REMOVED: 'removed',
   EQUAL: 'equal',
@@ -27,23 +27,23 @@ export default function createTree(oldNodes, newNodes) {
     if (_.isObject(oldNodes[key]) && _.isObject(newNodes[key])) {
       return {
         key,
-        type: NodeType.WITH_CHILDREN,
+        type: NODE_TYPE.WITH_CHILDREN,
         children: createTree(oldNodes[key], newNodes[key]),
       };
     }
 
     if (isEqual(key, oldNodes, newNodes)) {
-      return newNode(NodeType.EQUAL);
+      return newNode(NODE_TYPE.EQUAL);
     }
 
     if (isAdded(key, oldNodes, newNodes)) {
-      return newNode(NodeType.ADDED);
+      return newNode(NODE_TYPE.ADDED);
     }
 
     if (isRemoved(key, oldNodes, newNodes)) {
-      return newNode(NodeType.REMOVED);
+      return newNode(NODE_TYPE.REMOVED);
     }
 
-    return newNode(NodeType.UPDATED);
+    return newNode(NODE_TYPE.UPDATED);
   });
 }
