@@ -14,6 +14,6 @@ const formatTreeTo = {
   json: getJsonTree,
 };
 
-export default function formater(tree, formatType) {
+export default function format(tree, formatType) {
   return formatTreeTo[formatType](tree);
 }

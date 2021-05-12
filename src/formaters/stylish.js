@@ -17,22 +17,22 @@ const getValue = (value, indent) => (_.isObject(value)
 
 export default function getStylishTree(tree) {
   const stylishTree = (nodes, indent) => nodes.map((node) => {
-    const getNewValueString = (value) => `${getIndent(indent)}+ ${node.key}: ${getValue(value, indent)}\n`;
-    const getOldValueString = (value) => `${getIndent(indent)}- ${node.key}: ${getValue(value, indent)}\n`;
+    const getValue2String = (value) => `${getIndent(indent)}+ ${node.key}: ${getValue(value, indent)}\n`;
+    const getValue1String = (value) => `${getIndent(indent)}- ${node.key}: ${getValue(value, indent)}\n`;
     const getEqualValueString = (value) => `${getIndent(indent + 2)}${node.key}: ${getValue(value, indent)}\n`;
 
     switch (node.type) {
       case NODE_TYPE.ADDED: {
-        return getNewValueString(node.newValue);
+        return getValue2String(node.value2);
       }
       case NODE_TYPE.REMOVED: {
-        return getOldValueString(node.oldValue);
+        return getValue1String(node.value1);
       }
       case NODE_TYPE.EQUAL: {
-        return getEqualValueString(node.newValue);
+        return getEqualValueString(node.value2);
       }
       case NODE_TYPE.UPDATED: {
-        return `${getOldValueString(node.oldValue)}${getNewValueString(node.newValue)}`;
+        return `${getValue1String(node.value1)}${getValue2String(node.value2)}`;
       }
       case NODE_TYPE.WITH_CHILDREN:
         return `${getIndent(indent + 2)}${node.key}: {\n${stylishTree(node.children, indent + 4).join('')}${getIndent(indent + 2)}}\n`;

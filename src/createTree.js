@@ -8,42 +8,38 @@ export const NODE_TYPE = {
   WITH_CHILDREN: 'withChildren',
 };
 
-const isAdded = (key, node1, node2) => !_.has(node1, key) && _.has(node2, key);
-const isRemoved = (key, node1, node2) => _.has(node1, key) && !_.has(node2, key);
-const isEqual = (key, node1, node2) => node1[key] === node2[key];
-
-export default function createTree(oldNodes, newNodes) {
-  const uniqKeys = _.union(Object.keys(oldNodes), Object.keys(newNodes));
+export default function createTree(data1, data2) {
+  const uniqKeys = _.union(Object.keys(data1), Object.keys(data2));
   const sortedKeys = _.sortBy(uniqKeys);
 
   return sortedKeys.map((key) => {
     const newNode = (type) => ({
       key,
       type,
-      oldValue: oldNodes[key] ?? null,
-      newValue: newNodes[key] ?? null,
+      value1: data1[key] ?? null,
+      value2: data2[key] ?? null,
     });
 
-    if (_.isObject(oldNodes[key]) && _.isObject(newNodes[key])) {
-      return {
-        key,
-        type: NODE_TYPE.WITH_CHILDREN,
-        children: createTree(oldNodes[key], newNodes[key]),
-      };
-    }
-
-    if (isEqual(key, oldNodes, newNodes)) {
-      return newNode(NODE_TYPE.EQUAL);
-    }
-
-    if (isAdded(key, oldNodes, newNodes)) {
+    if (!_.has(data1, key)) {
       return newNode(NODE_TYPE.ADDED);
     }
 
-    if (isRemoved(key, oldNodes, newNodes)) {
+    if (!_.has(data2, key)) {
       return newNode(NODE_TYPE.REMOVED);
     }
 
-    return newNode(NODE_TYPE.UPDATED);
+    if (_.isPlainObject(data1[key]) && _.isPlainObject(data2[key])) {
+      return {
+        key,
+        type: NODE_TYPE.WITH_CHILDREN,
+        children: createTree(data1[key], data2[key]),
+      };
+    }
+
+    if (!_.isEqual(data1[key], data2[key])) {
+      return newNode(NODE_TYPE.UPDATED);
+    }
+
+    return newNode(NODE_TYPE.EQUAL);
   });
 }

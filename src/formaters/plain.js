@@ -18,13 +18,13 @@ export default function getPlainTree(tree) {
 
       switch (node.type) {
         case NODE_TYPE.ADDED: {
-          return `Property '${property}' was added with value: ${getValueString(node.newValue)}`;
+          return `Property '${property}' was added with value: ${getValueString(node.value2)}`;
         }
         case NODE_TYPE.REMOVED: {
           return `Property '${property}' was removed`;
         }
         case NODE_TYPE.UPDATED: {
-          return `Property '${property}' was updated. From ${getValueString(node.oldValue)} to ${getValueString(node.newValue)}`;
+          return `Property '${property}' was updated. From ${getValueString(node.value1)} to ${getValueString(node.value2)}`;
         }
         case NODE_TYPE.WITH_CHILDREN: {
           return plainTree(node.children, property);
