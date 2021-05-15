@@ -1,6 +1,6 @@
-import getJsonTree from './json.js';
-import getPlainTree from './plain.js';
-import getStylishTree from './stylish.js';
+import formatToJson from './json.js';
+import formatToPlain from './plain.js';
+import formatToStylish from './stylish.js';
 
 export const FORMATER_TYPE = {
   STYLISH: 'stylish',
@@ -9,9 +9,9 @@ export const FORMATER_TYPE = {
 };
 
 const formatTreeTo = {
-  stylish: getStylishTree,
-  plain: getPlainTree,
-  json: getJsonTree,
+  stylish: formatToStylish,
+  plain: formatToPlain,
+  json: formatToJson,
 };
 
 export default function format(tree, formatType) {

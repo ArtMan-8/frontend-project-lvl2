@@ -1,44 +1,48 @@
 import _ from 'lodash';
 import { NODE_TYPE } from '../createTree.js';
 
-const getIndent = (multiplay) => ' '.repeat(multiplay);
+const getIndent = (depth, spacesCount = 4) => ' '.repeat(depth + spacesCount);
 
-const getLineFromObject = (object, indent) => {
-  const stylishObject = (obj) => Object.entries(obj).map(([key, value]) => (_.isObject(value)
-    ? `${getIndent(indent + 4)}${key}: ${getLineFromObject(value, indent + 4)}\n`
-    : `${getIndent(indent + 4)}${key}: ${value}\n`)).join('');
+const stringify = (someEntity, indentCount) => {
+  const iter = (currentValue, depth) => {
+    if (!_.isObject(currentValue)) return `${currentValue}`;
 
-  return `{\n${stylishObject(object)}${getIndent(indent)}}`;
+    const lines = Object
+      .entries(currentValue)
+      .map(([key, value]) => `${getIndent(depth + 4)}${key}: ${iter(value, depth + 4)}`);
+
+    return [
+      '{',
+      ...lines,
+      `${getIndent(depth)}}`,
+    ].join('\n');
+  };
+
+  return iter(someEntity, indentCount);
 };
 
-const getValue = (value, indent) => (_.isObject(value)
-  ? getLineFromObject(value, indent + 2)
-  : value);
-
-export default function getStylishTree(tree) {
-  const stylishTree = (nodes, indent) => nodes.map((node) => {
-    const getValue2String = (value) => `${getIndent(indent)}+ ${node.key}: ${getValue(value, indent)}\n`;
-    const getValue1String = (value) => `${getIndent(indent)}- ${node.key}: ${getValue(value, indent)}\n`;
-    const getEqualValueString = (value) => `${getIndent(indent + 2)}${node.key}: ${getValue(value, indent)}\n`;
+export default function formatToStylish(tree) {
+  const stylishTree = (nodes, depth) => nodes.map((node) => {
+    const getValueString = (value, sign) => `${getIndent(depth - 2)}${sign}${node.key}: ${stringify(value, depth)}\n`;
 
     switch (node.type) {
       case NODE_TYPE.ADDED: {
-        return getValue2String(node.value2);
+        return getValueString(node.value2, '+ ');
       }
       case NODE_TYPE.REMOVED: {
-        return getValue1String(node.value1);
+        return getValueString(node.value1, '- ');
       }
       case NODE_TYPE.EQUAL: {
-        return getEqualValueString(node.value2);
+        return getValueString(node.value2, '  ');
       }
       case NODE_TYPE.UPDATED: {
-        return `${getValue1String(node.value1)}${getValue2String(node.value2)}`;
+        return `${getValueString(node.value1, '- ')}${getValueString(node.value2, '+ ')}`;
       }
       case NODE_TYPE.WITH_CHILDREN:
-        return `${getIndent(indent + 2)}${node.key}: {\n${stylishTree(node.children, indent + 4).join('')}${getIndent(indent + 2)}}\n`;
+        return `${getIndent(depth)}${node.key}: {\n${stylishTree(node.children, depth + 4).join('')}${getIndent(depth)}}\n`;
       default: throw new Error(`Unknown ${node.type}`);
     }
   });
 
-  return `{\n${stylishTree(tree, 2).join('')}}`;
+  return `{\n${stylishTree(tree, 0).join('')}}`;
 }

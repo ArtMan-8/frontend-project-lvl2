@@ -1,7 +1,7 @@
 import createTree from './createTree.js';
 import format, { FORMATER_TYPE } from './formaters/index.js';
 import { getFile } from './helpers.js';
-import parseData from './parser/index.js';
+import parseData from './parser.js';
 
 export default function genDiff(filepath1, filepath2, formatType = FORMATER_TYPE.STYLISH) {
   const { data: fileData1, extension: fileExtension1 } = getFile(filepath1);

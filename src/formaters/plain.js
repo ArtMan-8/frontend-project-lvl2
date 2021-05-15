@@ -9,7 +9,7 @@ const getValueString = (value) => {
   return _.isObject(value) ? '[complex value]' : `${value}`;
 };
 
-export default function getPlainTree(tree) {
+export default function formatToPlain(tree) {
   const plainTree = (nodes, parent) => {
     const changedNodes = nodes.filter((node) => node.type !== NODE_TYPE.EQUAL);
 
